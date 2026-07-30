@@ -1,0 +1,1254 @@
+zabbix_export:
+  version: '6.0'
+  date: '2026-07-30T17:17:28Z'
+  groups:
+    -
+      uuid: 8f152a974b4f4e8ea08bb94e79bcf105
+      name: Templates
+  templates:
+    -
+      uuid: 37c915feae504c67b9c162dca0e16361
+      template: 'Sophos XG FW 20 SNMPv2'
+      name: 'Sophos XG FW 20 SNMPv2'
+      templates:
+        -
+          name: Sophos
+        -
+          name: 'Template Module HOST-RESOURCES-MIB CPU SNMP'
+        -
+          name: 'Template Module Interfaces SNMPv2 - Custom SAUDE.71'
+      groups:
+        -
+          name: Templates
+      items:
+        -
+          uuid: 450b7b852ccb4a5991306b3885a1490b
+          name: 'Service apache status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.11.0
+          key: apacheService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: ffe1256c6e154e8ba423eee071985e38
+              expression: 'last(/Sophos XG FW 20 SNMPv2/apacheService)<>3'
+              name: 'Service apache status is not running'
+              priority: AVERAGE
+        -
+          uuid: 9fc59f69d6d34d1e9a99f275b3bfa5b0
+          name: 'Device serial number'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.1.4.0
+          key: applianceKey
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: d3e759ccef5c4f85bc0de09babd31a27
+          name: 'Device name'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.1.1.0
+          key: applianceName
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: 58f9843f167e46868965081518576b84
+          name: 'Device type'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.1.2.0
+          key: applianceType
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: fbe3c0199f594275ac0b2581cf167f02
+          name: 'Service AS status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.7.0
+          key: asService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          status: DISABLED
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 684e98d34fac47028608a0ca816bc87d
+              expression: 'last(/Sophos XG FW 20 SNMPv2/asService)<>3 and last(/Sophos XG FW 20 SNMPv2/asService)<>7'
+              name: 'Service as status is not running'
+              priority: AVERAGE
+              manual_close: 'YES'
+        -
+          uuid: a897533e5def4f77a84c377e30006a87
+          name: 'Service AV status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.6.0
+          key: avService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: c03468a03e4d4e3e811c9aed1a1f7d35
+              expression: 'last(/Sophos XG FW 20 SNMPv2/avService)<>3'
+              name: 'Service av status is not running'
+              priority: AVERAGE
+        -
+          uuid: 9a92fbd6b5654e73a138988cf19772ac
+          name: 'Base license expire date'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.1.2.0
+          key: baseFWLicExpiryDate
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: TEXT
+          description: 'Base Firewall protection license expiry date.'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: 4251c60b9eea4455b97176bae744beab
+          name: 'Base license reg status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.1.1.0
+          key: baseFWLicRegStatus
+          delay: 1h
+          history: 2w
+          trends: 120d
+          description: 'Base Firewall protection license status.'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: 26987f248f6e42e88a68f1ce1bb48eb1
+          name: 'HA current status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.4.4.0
+          key: currentHAStatus
+          delay: 5m
+          history: 45d
+          trends: 120d
+          description: |
+            Textual Convention: HaStatus
+            Values: 	notapplicable( 0 ), auxiliary( 1 ), standAlone( 2 ), primary( 3 ), faulty( 4 ), ready ( 5 )
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::haStatus'
+          tags:
+            -
+              tag: Application
+              value: Status
+        -
+          uuid: 9635b18f90334681bd3427762c0ab839
+          name: 'Service database status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.16.0
+          key: databaseService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 3055bbaf13104083aafeba15a31be47f
+              expression: 'last(/Sophos XG FW 20 SNMPv2/databaseService)<>3'
+              name: 'Service database status is not running'
+              priority: AVERAGE
+        -
+          uuid: 652d5de847ff48e4b5afd319380bc34e
+          name: 'Service Dgd status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.21.0
+          key: dgdService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 0d069579844f473c843c2e7a57506283
+              expression: 'last(/Sophos XG FW 20 SNMPv2/dgdService)<>3'
+              name: 'Service dgd status is not running'
+              priority: AVERAGE
+        -
+          uuid: c3988590a5004330b34105709f2e1315
+          name: 'Disk capacity'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.4.1.0
+          key: diskCapacity
+          delay: 1h
+          history: 2w
+          trends: 120d
+          units: B
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '1048576'
+          tags:
+            -
+              tag: Application
+              value: Memory
+        -
+          uuid: 7a0dfdfc5cb7476ea5ef60db43e63460
+          name: 'Disk utilization'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.4.2.0
+          key: diskPercentUsage
+          delay: 5m
+          history: 45d
+          trends: 120d
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: Memory
+          triggers:
+            -
+              uuid: 04e51c61a5e54ea0b6cc1d9b168a7b1f
+              expression: 'avg(/Sophos XG FW 20 SNMPv2/diskPercentUsage,5m)>{$DISK_UTIL_MAX}'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'avg(/Sophos XG FW 20 SNMPv2/diskPercentUsage,5m)<({$DISK_UTIL_MAX}-5)'
+              name: 'Disk utilization high'
+              priority: HIGH
+              description: |
+                Procedimento para resolução.
+                https://contego-security.atlassian.net/wiki/spaces/CS/pages/97058824/Uso+de+disco+alto+em+firewall+sophos
+        -
+          uuid: 2750689f37f94a91a16074599a071930
+          name: 'Service dns status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.8.0
+          key: dnsService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 2ebb3865d2114498ad2adae2326526a5
+              expression: 'last(/Sophos XG FW 20 SNMPv2/dnsService)<>3'
+              name: 'Service dns status is not running'
+              priority: AVERAGE
+        -
+          uuid: 9cafc4a7b7bc4afca378352e749b9372
+          name: 'Service drouting status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.19.0
+          key: droutingService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 9c4bb0043a02499ca3cdb17384e95720
+              expression: 'last(/Sophos XG FW 20 SNMPv2/droutingService)<>3'
+              name: 'Service drouting status is not running'
+              priority: AVERAGE
+        -
+          uuid: 9a67e59629e44b20ab2f79177ced6f43
+          name: 'Firmware version'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.1.3.0
+          key: firewallVersion
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: 'Version of Intrusion Detection and Prevention (IDP)'
+          tags:
+            -
+              tag: Application
+              value: Inventory
+          triggers:
+            -
+              uuid: 615f5e33dc3d4a6fa5518f1db3e9d983
+              expression: '(last(/Sophos XG FW 20 SNMPv2/firewallVersion,#1)<>last(/Sophos XG FW 20 SNMPv2/firewallVersion,#2))=1'
+              recovery_mode: NONE
+              name: 'Firmware version changed'
+              priority: INFO
+              description: 'Ack to manual close'
+              manual_close: 'YES'
+        -
+          uuid: 6daffa1c8b754e1d9c8d261269fd84bd
+          name: 'Service FTP status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.4.0
+          key: ftpService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: f363884224e74dc3a9d1e5c84e522528
+              expression: 'last(/Sophos XG FW 20 SNMPv2/ftpService)<>3'
+              name: 'Service ftp status is not running'
+              priority: AVERAGE
+        -
+          uuid: 0f40f7afbdae42eab8daa4f5ecff3dcf
+          name: 'Service garner status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.18.0
+          key: garnerService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 194c6d00159640d9aac108e3ca38ec95
+              expression: 'last(/Sophos XG FW 20 SNMPv2/garnerService)<>3'
+              name: 'Service garner status is not running'
+              priority: AVERAGE
+        -
+          uuid: 50c5d37fae4e4a58b23f5249ba83e03c
+          name: 'HA mode'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.4.4.0
+          key: haMode
+          delay: 5m
+          history: 45d
+          trends: 120d
+          description: |
+            Textual Convention: HaStatusType
+            Values: disabled(0), enabled(1)
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::haStatusType'
+          tags:
+            -
+              tag: Application
+              value: Status
+        -
+          uuid: 6334cc0d69a043efb7272ab977eef787
+          name: 'Service HA status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.9.0
+          key: haService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 1c847f6bee234f89862362612a2a5715
+              expression: 'last(/Sophos XG FW 20 SNMPv2/haService)<>3 and last(/Sophos XG FW 20 SNMPv2/haService)<>0'
+              name: 'Service ha status is not running'
+              priority: AVERAGE
+        -
+          uuid: 84ef83977736480dacf42cb4c3d5416e
+          name: 'HTTP Hits'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.7.0
+          key: httpHits
+          delay: 3m
+          history: 2w
+          trends: '0'
+          tags:
+            -
+              tag: Application
+              value: Statistic
+        -
+          uuid: 0360d5839274485094020332c3850bee
+          name: 'Service HTTP status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.5.0
+          key: httpService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 3c655b6951e7479a857514d706d75ccf
+              expression: 'last(/Sophos XG FW 20 SNMPv2/httpService)<>3'
+              name: 'Service http status is not running'
+              priority: AVERAGE
+        -
+          uuid: 3e1d787d315d44bebebefc7b88e2263a
+          name: 'Service IMAP4 status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.2.0
+          key: imap4Service
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 8ca32cec91e14691a717f8eeeb50a38b
+              expression: 'last(/Sophos XG FW 20 SNMPv2/imap4Service)<>3'
+              name: 'Service imap4 status is not running'
+              priority: AVERAGE
+        -
+          uuid: 1c0fbfe3ecf242719b3d83cfe6c32fad
+          name: 'IMAP Hits'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.9.2.0
+          key: imapHits
+          delay: 3m
+          history: 2w
+          trends: '0'
+          tags:
+            -
+              tag: Application
+              value: Statistic
+        -
+          uuid: 1bc3b299e28f4354a8210aa51d0294db
+          name: 'Service IP-Sec VPN status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.15.0
+          key: ipSecVpnService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 3980488a0cda435b9f451cc5d5a6fdcd
+              expression: 'last(/Sophos XG FW 20 SNMPv2/ipSecVpnService)<>3'
+              name: 'Service IP-Sec VPN status is not running'
+              priority: AVERAGE
+        -
+          uuid: 0eaf9f11fac44ff3b7e345a39a3599f9
+          name: 'Service IPS status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.10.0
+          key: ipsService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: d4a2babeed0d41d18107e5b68e1d4b1c
+              expression: 'last(/Sophos XG FW 20 SNMPv2/ipsService)<>3'
+              name: 'Service IPS status is not running'
+              priority: AVERAGE
+        -
+          uuid: 51fe90f3cb2c406b980a71961e38dbf3
+          name: 'IDS version'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.1.6.0
+          key: ipsVersion
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: 'Version of Intrusion Detection and Prevention (IDP)'
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: 2de71e0193ba4849a6339b87f427f07b
+          name: 'Live user count'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.6.0
+          key: liveUserCount
+          delay: 3m
+          history: 2w
+          trends: '0'
+          tags:
+            -
+              tag: Application
+              value: Statistic
+        -
+          uuid: d5e9a7255b644bca8c27d05a0fe48799
+          name: 'Mail Protection license expire date'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.4.2.0
+          key: mailProtectionLicExpiryDate
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: TEXT
+          description: 'EMail Protection Iicense Expiry Date.'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: 3ccf3aab9010429ebe3a142c8f246796
+          name: 'Mail Protection license reg status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.4.1.0
+          key: mailProtectionLicRegStatus
+          delay: 1h
+          history: 2w
+          trends: 120d
+          description: 'EMail Protection license status.'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          tags:
+            -
+              tag: Application
+              value: License
+          triggers:
+            -
+              uuid: 1c96975bc25c4bcdb311fcc40a4f9139
+              expression: 'last(/Sophos XG FW 20 SNMPv2/mailProtectionLicRegStatus)=4'
+              name: 'Mail Protection license reg status'
+              url: 'https://{$ZABBIX_DNS}/zabbix.php?action=latest.view&filter_hostids%5B%5D={HOST.ID}&filter_application=License&select=&filter_set=1'
+              priority: AVERAGE
+              description: 'Mail Protection license is expired.'
+              manual_close: 'YES'
+        -
+          uuid: 9688c3ccad924753bdcc3ec57d5413d1
+          name: 'Memory capacity'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.5.1.0
+          key: memoryCapacity
+          delay: 1h
+          history: 2w
+          trends: 120d
+          units: B
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '1048576'
+          tags:
+            -
+              tag: Application
+              value: Memory
+        -
+          uuid: fbb30bf167004a37be8d20db3011388b
+          name: 'Memory utilization'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.5.2.0
+          key: memoryPercentUsage
+          history: 45d
+          trends: 120d
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: Memory
+          triggers:
+            -
+              uuid: bbc5dca9902f40fda967f8b95147c8ef
+              expression: 'avg(/Sophos XG FW 20 SNMPv2/memoryPercentUsage,15m)>{$MEMORY_UTIL_MAX}'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'avg(/Sophos XG FW 20 SNMPv2/memoryPercentUsage,5m)<({$MEMORY_UTIL_MAX}-5)'
+              name: 'Memory utilization high'
+              priority: HIGH
+        -
+          uuid: 73705fcc2de14ca8b0242aa654b02cf1
+          name: 'Network Protection license expire date'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.2.2.0
+          key: netProtectionLicExpiryDate
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: TEXT
+          description: 'Network Protection Iicense Expiry Date.'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: d9f6c04adffc4557bd1f65a120697f11
+          name: 'Network Protection reg license status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.2.1.0
+          key: netProtectionLicRegStatus
+          delay: 1h
+          history: 2w
+          trends: 120d
+          description: 'Network Protection registration license status'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          tags:
+            -
+              tag: Application
+              value: License
+          triggers:
+            -
+              uuid: 4eab68a96eec4a388ecbc4fe3cf19c17
+              expression: 'last(/Sophos XG FW 20 SNMPv2/netProtectionLicRegStatus)=4'
+              name: 'Network Protection reg license status'
+              url: 'https://{$ZABBIX_DNS}/zabbix.php?action=latest.view&filter_hostids%5B%5D={HOST.ID}&filter_application=License&select=&filter_set=1'
+              priority: AVERAGE
+              description: 'Network Protection reg status is expired.'
+        -
+          uuid: 4ecdccb1ac874efda6539bea45a94aef
+          name: 'Service network status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.17.0
+          key: networkService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: eb5748a09c4f4996add16c9aec7a043f
+              expression: 'last(/Sophos XG FW 20 SNMPv2/networkService)<>3'
+              name: 'Service network status is not running'
+              priority: AVERAGE
+        -
+          uuid: 61cb29d1787447f2ac97c21640be69c0
+          name: 'Service NTP status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.12.0
+          key: ntpService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 597c15a7910348829a5e0ec2fd0dabad
+              expression: 'last(/Sophos XG FW 20 SNMPv2/ntpService)<>3 and last(/Sophos XG FW 20 SNMPv2/ntpService)<>7'
+              name: 'Service ntp status is not running'
+              priority: AVERAGE
+        -
+          uuid: bf389af70c53474b8bb50ac4a609d6a1
+          name: 'POP3 Hits'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.9.1.0
+          key: pop3Hits
+          delay: 3m
+          history: 2w
+          trends: '0'
+          tags:
+            -
+              tag: Application
+              value: Statistic
+        -
+          uuid: d411afa838e447e2a03556d69717cc81
+          name: 'Service POP3 status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.1.0
+          key: pop3Service
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: cbc23437bb8748488c148b270416da8c
+              expression: 'last(/Sophos XG FW 20 SNMPv2/pop3Service)<>3'
+              name: 'Service pop3 status is not running'
+              priority: AVERAGE
+        -
+          uuid: c38a41fc54fd49cb842ef03d26694b59
+          name: 'Sandstrom license expire date'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.6.2.0
+          key: sandstromLicExpiryDate
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: TEXT
+          description: 'Sandstrom Protection Iicense Expiry Date.'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: b553e98723044bf59251711acf09fab8
+          name: 'Sandstrom license reg status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.6.1.0
+          key: sandstromLicRegStatus
+          delay: 1h
+          history: 2w
+          trends: 120d
+          description: 'Sandstrom Protection Iicense status.'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          tags:
+            -
+              tag: Application
+              value: License
+          triggers:
+            -
+              uuid: d8a7006c7f034111bc0363101ac0c9a4
+              expression: 'last(/Sophos XG FW 20 SNMPv2/sandstromLicRegStatus)=4'
+              name: 'Sandstrom license reg status'
+              url: 'https://{$ZABBIX_DNS}/zabbix.php?action=latest.view&filter_hostids%5B%5D={HOST.ID}&filter_application=License&select=&filter_set=1'
+              priority: AVERAGE
+              description: 'Sandstrom Protection licensereg status is expired.'
+        -
+          uuid: bbb32d8ca6384d9cb3bb2f857829ad54
+          name: 'SMTP Hits'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.9.3.0
+          key: smtpHits
+          delay: 3m
+          history: 2w
+          trends: '0'
+          tags:
+            -
+              tag: Application
+              value: Statistic
+        -
+          uuid: c12704a405724d238a1abc322041ec73
+          name: 'Service SMTP status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.3.0
+          key: smtpService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 859caa9df17647cd9fe75c17253b9f7e
+              expression: 'last(/Sophos XG FW 20 SNMPv2/smtpService)<>3'
+              name: 'Service smtp status is not running'
+              priority: AVERAGE
+        -
+          uuid: 6d250b623fe7447293a9550a6c403019
+          name: 'Service sshd status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.20.0
+          key: sshdService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 5d2cef0ef9aa4a73ae665bb60d74bc10
+              expression: 'last(/Sophos XG FW 20 SNMPv2/sshdService)<>3 and last(/Sophos XG FW 20 SNMPv2/sshdService)<>0'
+              name: 'Service sshd status is not running'
+              priority: AVERAGE
+        -
+          uuid: 4100fc6a70de47e5b0bba68df7274ef4
+          name: 'Service SSL-VPN status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.14.0
+          key: sslvpnService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 4f519e69e3ca489f8b5f77a6bc1c8b2f
+              expression: 'last(/Sophos XG FW 20 SNMPv2/sslvpnService)<>3 and last(/Sophos XG FW 20 SNMPv2/sslvpnService)<>7'
+              name: 'Service sslvpn status is not running'
+              priority: AVERAGE
+        -
+          uuid: 2af9b3c118e4409cacd6c22a9cadd9a5
+          name: 'Swap capacity'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.5.3.0
+          key: swapCapacity
+          delay: 1h
+          history: 2w
+          trends: 120d
+          units: B
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '1048576'
+          tags:
+            -
+              tag: Application
+              value: Memory
+        -
+          uuid: aafcfebf355b48fdb5eed7e03ff3a8e4
+          name: 'Swap utilization'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.5.4.0
+          key: swapPercentUsage
+          delay: 5m
+          history: 45d
+          trends: 120d
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: Memory
+          triggers:
+            -
+              uuid: 3969d808a7a94cf3b0d0dd6ae2a882f8
+              expression: 'avg(/Sophos XG FW 20 SNMPv2/swapPercentUsage,5m)>{$SWAP_UTIL_MAX}'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'avg(/Sophos XG FW 20 SNMPv2/swapPercentUsage,5m)<({$SWAP_UTIL_MAX}-5)'
+              name: 'Swap utilization high'
+              priority: HIGH
+        -
+          uuid: 727d28614f70451186f1f1cf5a78e5d2
+          name: 'Service tomcat status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.13.0
+          key: tomcatService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 7c89d253396e4c28b87a454ff9e82bd0
+              expression: 'last(/Sophos XG FW 20 SNMPv2/tomcatService)<>3'
+              name: 'Service tomcat status is not running'
+              priority: AVERAGE
+        -
+          uuid: 76d9d74124ee47c9bd17f7c0a47fa229
+          name: 'Webcat version'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.1.5.0
+          key: webcatVersion
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: 'Version of Webcat'
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: b8999d5b5fd54533a99963a39b2a45ae
+          name: 'Web Protection license expire date'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.3.2.0
+          key: webProtectionLicExpiryDate
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: TEXT
+          description: 'Web Protection license expiry date.'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: abed6ee8391c4cf18832bd3108950033
+          name: 'Web Protection license reg status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.3.1.0
+          key: webProtectionLicRegStatus
+          delay: 1h
+          history: 2w
+          trends: 120d
+          description: 'Web Protection registration license status.'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          tags:
+            -
+              tag: Application
+              value: License
+          triggers:
+            -
+              uuid: ae9ee5b233264bf3ae8e7d36a0971b5e
+              expression: 'last(/Sophos XG FW 20 SNMPv2/webProtectionLicRegStatus)=4'
+              name: 'Web Protection license reg status'
+              url: 'https://{$ZABBIX_DNS}/zabbix.php?action=latest.view&filter_hostids%5B%5D={HOST.ID}&filter_application=License&select=&filter_set=1'
+              priority: AVERAGE
+              description: 'Web Protection license reg staus is expired.'
+        -
+          uuid: a37b9c1bfbc64aa8b26e5f5568ae5f84
+          name: 'WebServer Protection license expire date'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.5.2.0
+          key: webServerProtectionLicExpiryDate
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: TEXT
+          description: 'WebServer Protection Iicense Expiry Date.'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: f3bb76a1694746e5a30a1256b6e7fdb7
+          name: 'WebServer Protection license reg status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.5.1.0
+          key: webServerProtectionLicRegStatus
+          delay: 1h
+          history: 2w
+          trends: 120d
+          description: 'WebServer Protection license status.'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          tags:
+            -
+              tag: Application
+              value: License
+          triggers:
+            -
+              uuid: 6c9d28b44ce74bc99180fef1fd26672d
+              expression: 'last(/Sophos XG FW 20 SNMPv2/webServerProtectionLicRegStatus)=4'
+              name: 'WebServer Protection license reg status'
+              url: 'https://{$ZABBIX_DNS}/zabbix.php?action=latest.view&filter_hostids%5B%5D={HOST.ID}&filter_application=License&select=&filter_set=1'
+              priority: AVERAGE
+              description: 'WebServer Protection license reg status is expired.'
+              manual_close: 'YES'
+      discovery_rules:
+        -
+          uuid: de487f24cd904ddf832e150acc0b0038
+          name: 'Vpn Interface Discovery'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#SFOS_CONN_NAME}, 1.3.6.1.4.1.2604.5.1.6.1.1.1.1.2, {#SFOS_CONN_DESC}, 1.3.6.1.4.1.2604.5.1.6.1.1.1.1.3, {#SFOS_CONN_TYPE}, 1.3.6.1.4.1.2604.5.1.6.1.1.1.1.6, {#SFOS_VPN_LOCAL_PORT}, 1.3.6.1.4.1.2604.5.1.6.1.1.1.1.7, {#SFOS_VPN_CONN_STATUS}, 1.3.6.1.4.1.2604.5.1.6.1.1.1.1.9, {#SFOS_VPN_CONN_ACTIVE}, 1.3.6.1.4.1.2604.5.1.6.1.1.1.1.10]'
+          key: net.if.status
+          filter:
+            conditions:
+              -
+                macro: '{#SFOS_CONN_DESC}'
+                value: '{$SFOS-F-MIB-CONN-DESC-NOT}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: A
+              -
+                macro: '{#SFOS_CONN_DESC}'
+                value: '{$SFOS-F-MIB-CONN-DESC}'
+                formulaid: B
+              -
+                macro: '{#SFOS_CONN_NAME}'
+                value: '{$SFOS-F-MIB-CONN-NAME-NOT}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: C
+              -
+                macro: '{#SFOS_CONN_NAME}'
+                value: '{$SFOS-F-MIB-CONN-NAME}'
+                formulaid: D
+              -
+                macro: '{#SFOS_CONN_TYPE}'
+                value: '{$SFOS-F-MIB-CONN-DESC-NOT}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: E
+              -
+                macro: '{#SFOS_CONN_TYPE}'
+                value: '{$SFOS-F-MIB-CONN-DESC}'
+                formulaid: F
+              -
+                macro: '{#SFOS_VPN_CONN_ACTIVE}'
+                value: '{$SFOS-F-MIB-CONN-ACTIVE-NOT}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: G
+              -
+                macro: '{#SFOS_VPN_CONN_ACTIVE}'
+                value: '{$SFOS-F-MIB-CONN-ACTIVE}'
+                formulaid: H
+              -
+                macro: '{#SFOS_VPN_CONN_STATUS}'
+                value: '{$SFOS-F-MIB-CONN-STATUS-NOT}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: I
+              -
+                macro: '{#SFOS_VPN_CONN_STATUS}'
+                value: '{$SFOS-F-MIB-CONN-STATUS}'
+                formulaid: J
+              -
+                macro: '{#SFOS_VPN_LOCAL_PORT}'
+                value: '{$SFOS-F-MIB-LOCAL-PORT-NOT}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: K
+              -
+                macro: '{#SFOS_VPN_LOCAL_PORT}'
+                value: '{$SFOS-F-MIB-LOCAL-PORT}'
+                formulaid: L
+          item_prototypes:
+            -
+              uuid: d000124f41c44fc2ad15a85ad151a6f6
+              name: 'IPSec {#SFOS_CONN_NAME}: Active'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2604.5.1.6.1.1.1.1.10.{#SNMPINDEX}'
+              key: 'net.if.status[IPSecActive.{#SNMPINDEX}]'
+              tags:
+                -
+                  tag: Application
+                  value: 'IPSec {#SFOS_CONN_NAME}'
+              trigger_prototypes:
+                -
+                  uuid: 72a463f04dec4ced817d295724794495
+                  expression: |
+                    last(/Sophos XG FW 20 SNMPv2/net.if.status[IPSecActive.{#SNMPINDEX}],#1) <> last(/Sophos XG FW 20 SNMPv2/net.if.status[IPSecActive.{#SNMPINDEX}],#2) and
+                    last(/Sophos XG FW 20 SNMPv2/net.if.status[IPSecActive.{#SNMPINDEX}]) = 0
+                  name: 'IPSec {#SFOS_CONN_NAME}: Desabilitada'
+                  priority: HIGH
+                  manual_close: 'YES'
+            -
+              uuid: d23eb48a560b49dea00111dc0895890f
+              name: 'IPSec {#SFOS_CONN_NAME}: Status'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2604.5.1.6.1.1.1.1.9.{#SNMPINDEX}'
+              key: 'net.if.status[IPSecStatus.{#SNMPINDEX}]'
+              tags:
+                -
+                  tag: Application
+                  value: 'IPSec {#SFOS_CONN_NAME}'
+          trigger_prototypes:
+            -
+              uuid: 80fb8c98843247cfa84192d34a5ec4f9
+              expression: 'last(/Sophos XG FW 20 SNMPv2/net.if.status[IPSecStatus.{#SNMPINDEX}])= 0 and last(/Sophos XG FW 20 SNMPv2/net.if.status[IPSecActive.{#SNMPINDEX}]) = 1'
+              name: 'IPSec Status {#SFOS_CONN_NAME}: Desconectada'
+              priority: HIGH
+              manual_close: 'YES'
+      macros:
+        -
+          macro: '{$CPU_UTIL_MAX}'
+          value: '95'
+        -
+          macro: '{$DISK_UTIL_MAX}'
+          value: '85'
+        -
+          macro: '{$MEMORY_UTIL_MAX}'
+          value: '90'
+        -
+          macro: '{$SNMP_COMMUNITY}'
+          value: public
+        -
+          macro: '{$SWAP_UTIL_MAX}'
+          value: '90'
+      dashboards:
+        -
+          uuid: 0fb19a18c13e438c8fdbfe8ed363b778
+          name: 'Network interfaces'
+          pages:
+            -
+              widgets:
+                -
+                  type: GRAPH_PROTOTYPE
+                  width: '24'
+                  height: '5'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '2'
+                    -
+                      type: INTEGER
+                      name: columns
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: rows
+                      value: '1'
+      valuemaps:
+        -
+          uuid: ad113b2bd8274cd1a196b08ee968a791
+          name: 'SOPHOS SFOS-FIREWALL-MIB::haStatus'
+          mappings:
+            -
+              value: '0'
+              newvalue: notapplicable
+            -
+              value: '1'
+              newvalue: auxiliary
+            -
+              value: '2'
+              newvalue: standAlone
+            -
+              value: '3'
+              newvalue: primary
+            -
+              value: '4'
+              newvalue: faulty
+            -
+              value: '5'
+              newvalue: ready
+        -
+          uuid: 8a8372821a71432a9d3967e2972ea1e2
+          name: 'SOPHOS SFOS-FIREWALL-MIB::haStatusType'
+          mappings:
+            -
+              value: '0'
+              newvalue: disabled
+            -
+              value: '1'
+              newvalue: enabled
+        -
+          uuid: 08e81909eb7647c7a3b1860c6d806d3e
+          name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          mappings:
+            -
+              value: '0'
+              newvalue: untouched
+            -
+              value: '1'
+              newvalue: stopped
+            -
+              value: '2'
+              newvalue: initializing
+            -
+              value: '3'
+              newvalue: running
+            -
+              value: '4'
+              newvalue: exiting
+            -
+              value: '5'
+              newvalue: dead
+            -
+              value: '6'
+              newvalue: frozen
+            -
+              value: '7'
+              newvalue: unregistered
+        -
+          uuid: a3bca749d75340238345d6ed1b3282bc
+          name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          mappings:
+            -
+              value: '1'
+              newvalue: trial
+            -
+              value: '2'
+              newvalue: unsubscribed
+            -
+              value: '3'
+              newvalue: subscribed
+            -
+              value: '4'
+              newvalue: expired
+  triggers:
+    -
+      uuid: 0e973a06923543a7bc95fdb8a9b23eae
+      expression: '(last(/Sophos XG FW 20 SNMPv2/haMode)=1 and last(/Sophos XG FW 20 SNMPv2/currentHAStatus)=2)'
+      recovery_mode: RECOVERY_EXPRESSION
+      recovery_expression: 'last(/Sophos XG FW 20 SNMPv2/currentHAStatus)<>2 or last(/Sophos XG FW 20 SNMPv2/currentHAStatus)<>4'
+      name: 'HA - One of the nodes may be down'
+      priority: HIGH
+      description: |
+        Alerta quando o HA está ativo e um dos nós está como Stand-alone.
+        Isso ocorre quando o nó secundário (backup) falhou.
+    -
+      uuid: cc9d4a4b1d7c4ef286d1f51eb2020a96
+      expression: 'last(/Sophos XG FW 20 SNMPv2/haMode)=1 and last(/Sophos XG FW 20 SNMPv2/currentHAStatus)=4'
+      recovery_mode: RECOVERY_EXPRESSION
+      recovery_expression: 'last(/Sophos XG FW 20 SNMPv2/currentHAStatus)<>2 or last(/Sophos XG FW 20 SNMPv2/currentHAStatus)<>4'
+      name: 'HA - One of the nodes may be down'
+      priority: HIGH
+      description: |
+        Alerta quando o HA está ativo e um dos nós está como Stand-alone.
+        Isso ocorre quando o nó secundário (backup) falhou.

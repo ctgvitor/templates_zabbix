@@ -1,0 +1,1433 @@
+zabbix_export:
+  version: '6.0'
+  date: '2026-07-30T17:16:46Z'
+  groups:
+    -
+      uuid: 8f152a974b4f4e8ea08bb94e79bcf105
+      name: Templates
+  templates:
+    -
+      uuid: 9eb181575e5544ae8c352a555ad2778f
+      template: 'Sophos XGS SNMPv2 - CONTEGO'
+      name: 'Sophos XGS SNMPv2 - CONTEGO'
+      description: |
+        Template de monitoramento para Firewalls Sophos XG/XGS via SNMPv2, desenvolvido e customizado pela CONTEGO para monitoramento operacional e proativo do ambiente.
+        
+        Recursos monitorados:
+        - Status geral do appliance
+        - Informações de inventário (nome, modelo e serial)
+        - Consumo de CPU e memória
+        - Serviços internos do SFOS
+        - Estado de serviços críticos:
+          - Apache
+          - AV
+          - IPS
+          - VPN
+          - Reporting
+          - Authentication
+          - Network
+          - DHCP
+          - HA
+          - Entre outros
+        - Licenciamento e validade de subscriptions
+        - Interfaces de rede
+        - Sessões e desempenho
+        - Alarmes e triggers para indisponibilidade de serviços
+        
+        Template compatível com Sophos Firewall OS (SFOS) utilizando a MIB oficial SOPHOS-SFOS-FIREWALL-MIB.
+        
+        Desenvolvido para utilização em ambientes monitorados pelo Zabbix com coleta SNMPv2 habilitada.
+      groups:
+        -
+          name: Templates
+      items:
+        -
+          uuid: 7d88c6a901fb4b4eb63da1008e93653d
+          name: 'Service apache status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.11.0
+          key: apacheService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 5169960178eb453c8898e7b33b714891
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/apacheService)<>3'
+              name: 'Service apache status is not running'
+              priority: AVERAGE
+        -
+          uuid: 1127405e735b417581180913dc32c387
+          name: 'Device serial number'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.1.4.0
+          key: applianceKey
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: c0b77d591ff245279fef2b42ec5c2141
+          name: 'Device name'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.1.1.0
+          key: applianceName
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: da29feb133e741619e717c88a4da65d6
+          name: 'Device type'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.1.2.0
+          key: applianceType
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: cfe2f865db8d4a1aa30560a81ad7a44c
+          name: 'Service AS status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.7.0
+          key: asService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          status: DISABLED
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 3f7b10a6116e4dc3beb010a88d89e61a
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/asService)<>3 and last(/Sophos XGS SNMPv2 - CONTEGO/asService)<>7'
+              name: 'Service as status is not running'
+              priority: AVERAGE
+              manual_close: 'YES'
+        -
+          uuid: 59121ef844cc42fd9b65e153fd5090a6
+          name: 'Service AV status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.6.0
+          key: avService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: af445304f36a408693d8a19ec35ccc47
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/avService)<>3'
+              name: 'Service av status is not running'
+              priority: AVERAGE
+        -
+          uuid: 30d7ef38d4ab4cb2a3182d9f566c5bb4
+          name: 'Base license expire date'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.1.2.0
+          key: baseFWLicExpiryDate
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: TEXT
+          description: 'Base Firewall protection license expiry date.'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: 703fbe238bbf44d5ba7a9342f1472715
+          name: 'Base license reg status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.1.1.0
+          key: baseFWLicRegStatus
+          delay: 1h
+          history: 2w
+          trends: 120d
+          description: 'Base Firewall protection license status.'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: ea3a8d9273a847a3b667eb2e9295bed6
+          name: 'HA current status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.4.4.0
+          key: currentHAStatus
+          delay: 5m
+          history: 45d
+          trends: 120d
+          description: 'Textual Convention: HaStatus Values: notapplicable(0), auxiliary(1), standAlone(2), primary(3), faulty(4), ready(5)'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::haStatus'
+          tags:
+            -
+              tag: Application
+              value: Status
+        -
+          uuid: 26b7b1643674495aa2c5ffa5807e21ed
+          name: 'Service database status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.16.0
+          key: databaseService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 7d7c3ee9ec2f414d82bad610389a2998
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/databaseService)<>3'
+              name: 'Service database status is not running'
+              priority: AVERAGE
+        -
+          uuid: f8eca0f34ccd4f1e9ceb5bfb5eafdcd5
+          name: 'Service Dgd status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.21.0
+          key: dgdService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 80c2b87207b34e75835f1b9fc54c23fa
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/dgdService)<>3'
+              name: 'Service dgd status is not running'
+              priority: AVERAGE
+        -
+          uuid: 35c091052d294cbca76bf93ff90d7873
+          name: 'Disk capacity'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.4.1.0
+          key: diskCapacity
+          delay: 1h
+          history: 2w
+          trends: 120d
+          units: B
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '1048576'
+          tags:
+            -
+              tag: Application
+              value: Memory
+        -
+          uuid: 0fd9404a63674ef282d3eef27b2b9bf2
+          name: 'Disk utilization'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.4.2.0
+          key: diskPercentUsage
+          delay: 5m
+          history: 45d
+          trends: 120d
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: Memory
+          triggers:
+            -
+              uuid: 761e1c7a99dd4fda9aaa5a858bc7dc00
+              expression: 'avg(/Sophos XGS SNMPv2 - CONTEGO/diskPercentUsage,5m)>{$DISK_UTIL_MAX}'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'avg(/Sophos XGS SNMPv2 - CONTEGO/diskPercentUsage,5m)<({$DISK_UTIL_MAX}-5)'
+              name: 'Disk utilization high'
+              priority: HIGH
+              description: 'Procedimento para resolução.'
+        -
+          uuid: 57a584d8512a458e823951afae24942a
+          name: 'Service dns status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.8.0
+          key: dnsService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 3fee16ed3a85486086cadac553942fff
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/dnsService)<>3'
+              name: 'Service dns status is not running'
+              priority: AVERAGE
+        -
+          uuid: 8da34f3611ff45b9abd9be09f2cc1809
+          name: 'Service drouting status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.19.0
+          key: droutingService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 9f6a65e57e274dccb72f2a0dcdd099ee
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/droutingService)<>3'
+              name: 'Service drouting status is not running'
+              priority: AVERAGE
+        -
+          uuid: 7b2a2ff03e404de29c87c21a353a27c1
+          name: 'Firmware version'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.1.3.0
+          key: firewallVersion
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: 'Version of Intrusion Detection and Prevention (IDP)'
+          tags:
+            -
+              tag: Application
+              value: Inventory
+          triggers:
+            -
+              uuid: a55418ba3f3e4e8e9bb8b982b4d51d41
+              expression: '(last(/Sophos XGS SNMPv2 - CONTEGO/firewallVersion,#1)<>last(/Sophos XGS SNMPv2 - CONTEGO/firewallVersion,#2))=1'
+              recovery_mode: NONE
+              name: 'Firmware version changed'
+              priority: INFO
+              description: 'Ack to manual close'
+              manual_close: 'YES'
+        -
+          uuid: 8300376ffc634f04ad341f5f6df7a3e2
+          name: 'Service FTP status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.4.0
+          key: ftpService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 7bd3c2f2a1f7486f836b8c5933ec2010
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/ftpService)<>3'
+              name: 'Service ftp status is not running'
+              priority: AVERAGE
+        -
+          uuid: ab0e392ac0064a508088008c8fe707ef
+          name: 'Service garner status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.18.0
+          key: garnerService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 70532d04f68c45798635b45b766dbe68
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/garnerService)<>3'
+              name: 'Service garner status is not running'
+              priority: AVERAGE
+        -
+          uuid: cd7a752ce8704b9a8240cc7cc05e7fc1
+          name: 'HA mode'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.4.4.0
+          key: haMode
+          delay: 5m
+          history: 45d
+          trends: 120d
+          description: 'Textual Convention: HaStatusType Values: disabled(0), enabled(1)'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::haStatusType'
+          tags:
+            -
+              tag: Application
+              value: Status
+        -
+          uuid: dc28d561725449a3b52129f5a9048419
+          name: 'Service HA status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.9.0
+          key: haService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 0127e9c4b34e4837a52fe7208aec75d0
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/haService)<>3 and last(/Sophos XGS SNMPv2 - CONTEGO/haService)<>0'
+              name: 'Service ha status is not running'
+              priority: AVERAGE
+        -
+          uuid: 7a844347478542259ff5ef758cec1bcc
+          name: 'HTTP Hits'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.7.0
+          key: httpHits
+          delay: 3m
+          history: 2w
+          trends: '0'
+          tags:
+            -
+              tag: Application
+              value: Statistic
+        -
+          uuid: a0b8f05d10a940fabdd0536caabb7ecd
+          name: 'Service HTTP status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.5.0
+          key: httpService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 8c3b89da805648bfbac88e263e5d75e1
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/httpService)<>3'
+              name: 'Service http status is not running'
+              priority: AVERAGE
+        -
+          uuid: 8249c373980446048e6be99cb09797cf
+          name: 'Service IMAP4 status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.2.0
+          key: imap4Service
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: dd17c63324f149aaae0f2cde64962d93
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/imap4Service)<>3'
+              name: 'Service imap4 status is not running'
+              priority: AVERAGE
+        -
+          uuid: d8d044e4e0624663ab56029b21a796a0
+          name: 'IMAP Hits'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.9.2.0
+          key: imapHits
+          delay: 3m
+          history: 2w
+          trends: '0'
+          tags:
+            -
+              tag: Application
+              value: Statistic
+        -
+          uuid: 2d9f10090e4643babe31e04f11ce1d7f
+          name: 'Service IP-Sec VPN status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.15.0
+          key: ipSecVpnService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: f34eb5a971af43f88dc88dc4d6bcd418
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/ipSecVpnService)<>3'
+              name: 'Service IP-Sec VPN status is not running'
+              priority: AVERAGE
+        -
+          uuid: d557207c1df7487684fc70a5b8c64e79
+          name: 'Service IPS status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.10.0
+          key: ipsService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 4ad5cedeed324772a3c7fa7213a91a80
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/ipsService)<>3'
+              name: 'Service IPS status is not running'
+              priority: AVERAGE
+        -
+          uuid: 5712bdcb4682436b82fdcccf96f4bb94
+          name: 'IDS version'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.1.6.0
+          key: ipsVersion
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: 'Version of Intrusion Detection and Prevention (IDP)'
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: 39bde996882943dfa212270a33f9947f
+          name: 'Live user count'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.6.0
+          key: liveUserCount
+          delay: 3m
+          history: 2w
+          trends: '0'
+          tags:
+            -
+              tag: Application
+              value: Statistic
+        -
+          uuid: f750d0aa69af4b7ebe29e5db093fdc52
+          name: 'Mail Protection license expire date'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.4.2.0
+          key: mailProtectionLicExpiryDate
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: TEXT
+          description: 'EMail Protection Iicense Expiry Date.'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: f8aa5df12ace470699709f309c8c607c
+          name: 'Mail Protection license reg status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.4.1.0
+          key: mailProtectionLicRegStatus
+          delay: 1h
+          history: 2w
+          trends: 120d
+          description: 'EMail Protection license status.'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          tags:
+            -
+              tag: Application
+              value: License
+          triggers:
+            -
+              uuid: c7e0a4459f3b4ad2baf5421b1df5e9f5
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/mailProtectionLicRegStatus)=4'
+              name: 'Mail Protection license reg status'
+              status: DISABLED
+              priority: AVERAGE
+              description: 'Mail Protection license is expired.'
+              manual_close: 'YES'
+        -
+          uuid: 71a14239a80a4264bafc6db2c42bd47c
+          name: 'Memory capacity'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.5.1.0
+          key: memoryCapacity
+          delay: 1h
+          history: 2w
+          trends: 120d
+          units: B
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '1048576'
+          tags:
+            -
+              tag: Application
+              value: Memory
+        -
+          uuid: fc78755579d741279dcf2cee79a21afc
+          name: 'Memory utilization'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.5.2.0
+          key: memoryPercentUsage
+          history: 45d
+          trends: 120d
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: Memory
+          triggers:
+            -
+              uuid: e129afed2a4a48e88cbcac80fe18a6da
+              expression: 'avg(/Sophos XGS SNMPv2 - CONTEGO/memoryPercentUsage,15m)>{$MEMORY_UTIL_MAX}'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'avg(/Sophos XGS SNMPv2 - CONTEGO/memoryPercentUsage,5m)<({$MEMORY_UTIL_MAX}-5)'
+              name: 'Memory utilization high'
+              priority: HIGH
+        -
+          uuid: 24c0895042d047e2b4c98671e2e8106e
+          name: 'Network Protection license expire date'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.2.2.0
+          key: netProtectionLicExpiryDate
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: TEXT
+          description: 'Network Protection Iicense Expiry Date.'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: 96eceb3f9a554a3b8963e8ec67fe2290
+          name: 'Network Protection reg license status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.2.1.0
+          key: netProtectionLicRegStatus
+          delay: 1h
+          history: 2w
+          trends: 120d
+          description: 'Network Protection registration license status'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          tags:
+            -
+              tag: Application
+              value: License
+          triggers:
+            -
+              uuid: 4ee4733f4fe44b6f8b6bfb4ac4e24d42
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/netProtectionLicRegStatus)=4'
+              name: 'Network Protection reg license status'
+              priority: AVERAGE
+              description: 'Network Protection reg status is expired.'
+        -
+          uuid: acbcb796045149d599d22538ae372db0
+          name: 'Service network status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.17.0
+          key: networkService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: d04d3ce3e8de4595924f2a3d5423266d
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/networkService)<>3'
+              name: 'Service network status is not running'
+              priority: AVERAGE
+        -
+          uuid: 51f9b67042f14bb386f26e060d393b95
+          name: 'Service NTP status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.12.0
+          key: ntpService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 6ebd077a47174879b6439dc0144955a2
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/ntpService)<>3 and last(/Sophos XGS SNMPv2 - CONTEGO/ntpService)<>7'
+              name: 'Service ntp status is not running'
+              priority: AVERAGE
+        -
+          uuid: 24457a1232174f939de1f2aa6558413b
+          name: 'POP3 Hits'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.9.1.0
+          key: pop3Hits
+          delay: 3m
+          history: 2w
+          trends: '0'
+          tags:
+            -
+              tag: Application
+              value: Statistic
+        -
+          uuid: fbbd07632dd9468791573105527d5a22
+          name: 'Service POP3 status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.1.0
+          key: pop3Service
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: be31dc64b3d0417ea8fe0a3813fe4ca3
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/pop3Service)<>3'
+              name: 'Service pop3 status is not running'
+              priority: AVERAGE
+        -
+          uuid: b18ba0c990374c0fa61a1d38c7abe233
+          name: 'Sandstrom license expire date'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.6.2.0
+          key: sandstromLicExpiryDate
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: TEXT
+          description: 'Sandstrom Protection Iicense Expiry Date.'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: 5899b23ecd2a4fafabe1a786ede343f6
+          name: 'Sandstrom license reg status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.6.1.0
+          key: sandstromLicRegStatus
+          delay: 1h
+          history: 2w
+          trends: 120d
+          description: 'Sandstrom Protection Iicense status.'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          tags:
+            -
+              tag: Application
+              value: License
+          triggers:
+            -
+              uuid: 8202c7e222534748b74c9955a90fff2c
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/sandstromLicRegStatus)=4'
+              name: 'Sandstrom license reg status'
+              priority: AVERAGE
+              description: 'Sandstrom Protection licensereg status is expired.'
+        -
+          uuid: dbf18c18c1374bb1a60dfb81b28bc8d7
+          name: 'SMTP Hits'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.9.3.0
+          key: smtpHits
+          delay: 3m
+          history: 2w
+          trends: '0'
+          tags:
+            -
+              tag: Application
+              value: Statistic
+        -
+          uuid: 03e64967eb5048bb914ef40455156d76
+          name: 'Service SMTP status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.3.0
+          key: smtpService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: fa86b82d32d747a78b4847ef62871f7d
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/smtpService)<>3'
+              name: 'Service smtp status is not running'
+              priority: AVERAGE
+        -
+          uuid: baa11714c6ea48d0bae9c514635ce432
+          name: 'Service sshd status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.20.0
+          key: sshdService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 08c6ba14ffa647c98abde1bf0c1dccf6
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/sshdService)<>3 and last(/Sophos XGS SNMPv2 - CONTEGO/sshdService)<>0'
+              name: 'Service sshd status is not running'
+              priority: AVERAGE
+        -
+          uuid: 91f3cc139f5942d5a5da3b054d9c7627
+          name: 'Service SSL-VPN status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.14.0
+          key: sslvpnService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: 4897c73990e14233915ec69a239c3c3f
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/sslvpnService)<>3 and last(/Sophos XGS SNMPv2 - CONTEGO/sslvpnService)<>7'
+              name: 'Service sslvpn status is not running'
+              priority: AVERAGE
+        -
+          uuid: 7f3b34ac59ff4ea68d39cc904a9fd9f0
+          name: 'Swap capacity'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.5.3.0
+          key: swapCapacity
+          delay: 1h
+          history: 2w
+          trends: 120d
+          units: B
+          preprocessing:
+            -
+              type: MULTIPLIER
+              parameters:
+                - '1048576'
+          tags:
+            -
+              tag: Application
+              value: Memory
+        -
+          uuid: a5eed478b2ad4b37b0a06ba261aff599
+          name: 'Swap utilization'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.2.5.4.0
+          key: swapPercentUsage
+          delay: 5m
+          history: 45d
+          trends: 120d
+          units: '%'
+          tags:
+            -
+              tag: Application
+              value: Memory
+          triggers:
+            -
+              uuid: 4b907b4cdf764752adf91b723336e57d
+              expression: 'avg(/Sophos XGS SNMPv2 - CONTEGO/swapPercentUsage,5m)>{$SWAP_UTIL_MAX}'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'avg(/Sophos XGS SNMPv2 - CONTEGO/swapPercentUsage,5m)<({$SWAP_UTIL_MAX}-5)'
+              name: 'Swap utilization high'
+              priority: HIGH
+        -
+          uuid: 9a6717a95955430484df5ec2910655c9
+          name: 'Service tomcat status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.3.13.0
+          key: tomcatService
+          delay: 5m
+          history: 2w
+          trends: '0'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          tags:
+            -
+              tag: Application
+              value: Services
+          triggers:
+            -
+              uuid: cb69237b34db443eaa4150ebe858c4a0
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/tomcatService)<>3'
+              name: 'Service tomcat status is not running'
+              priority: AVERAGE
+        -
+          uuid: e1f5070c69484cf7b2a8bee113fa4d0a
+          name: 'Webcat version'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.1.5.0
+          key: webcatVersion
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: CHAR
+          description: 'Version of Webcat'
+          tags:
+            -
+              tag: Application
+              value: Inventory
+        -
+          uuid: 0e8b943644444e6e9734c8d0ed6c0482
+          name: 'Web Protection license expire date'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.3.2.0
+          key: webProtectionLicExpiryDate
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: TEXT
+          description: 'Web Protection license expiry date.'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: 2005346429bd4e8ca651dbf767f3ab51
+          name: 'Web Protection license reg status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.3.1.0
+          key: webProtectionLicRegStatus
+          delay: 1h
+          history: 2w
+          trends: 120d
+          description: 'Web Protection registration license status.'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          tags:
+            -
+              tag: Application
+              value: License
+          triggers:
+            -
+              uuid: 342f397186ac4982a4b8c282ca59ae88
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/webProtectionLicRegStatus)=4'
+              name: 'Web Protection license reg status'
+              priority: AVERAGE
+              description: 'Web Protection license reg staus is expired.'
+        -
+          uuid: 29f67f973ca043bd979141bfe40c3ab3
+          name: 'WebServer Protection license expire date'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.5.2.0
+          key: webServerProtectionLicExpiryDate
+          delay: 1h
+          history: 2w
+          trends: '0'
+          value_type: TEXT
+          description: 'WebServer Protection Iicense Expiry Date.'
+          tags:
+            -
+              tag: Application
+              value: License
+        -
+          uuid: 2d9ced4355de43a58adb00983bfe00fa
+          name: 'WebServer Protection license reg status'
+          type: SNMP_AGENT
+          snmp_oid: 1.3.6.1.4.1.2604.5.1.5.5.1.0
+          key: webServerProtectionLicRegStatus
+          delay: 1h
+          history: 2w
+          trends: 120d
+          description: 'WebServer Protection license status.'
+          valuemap:
+            name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          tags:
+            -
+              tag: Application
+              value: License
+          triggers:
+            -
+              uuid: edfa1ce05d764dc488a427068342cd73
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/webServerProtectionLicRegStatus)=4'
+              name: 'WebServer Protection license reg status'
+              priority: AVERAGE
+              description: 'WebServer Protection license reg status is expired.'
+              manual_close: 'YES'
+      discovery_rules:
+        -
+          uuid: 4873cc2f130a4907804dca4f70c62d7c
+          name: 'Network interfaces discovery'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#IFNAME},1.3.6.1.2.1.31.1.1.1.1,{#IFDESCR},1.3.6.1.2.1.2.2.1.2]'
+          key: net.if.discovery.sophos
+          delay: 10m
+          filter:
+            conditions:
+              -
+                macro: '{#IFNAME}'
+                value: '{$IFNAME_MATCHES}'
+                formulaid: A
+              -
+                macro: '{#IFNAME}'
+                value: '{$IFNAME_NOT_MATCHES}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: B
+          item_prototypes:
+            -
+              uuid: 93b8458611574a1b95309eab0c968231
+              name: 'Interface {#IFNAME}: Admin status'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.7.{#SNMPINDEX}'
+              key: 'net.if.adminstatus.sophos[{#SNMPINDEX}]'
+              history: 2w
+              trends: 120d
+              valuemap:
+                name: 'Interface operational status'
+              tags:
+                -
+                  tag: Application
+                  value: Interfaces
+            -
+              uuid: b516264502f44352b046199e6c4ca8df
+              name: 'Interface {#IFNAME}: Incoming traffic'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.6.{#SNMPINDEX}'
+              key: 'net.if.in.sophos[{#SNMPINDEX}]'
+              history: 2w
+              trends: 120d
+              value_type: FLOAT
+              units: bps
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                -
+                  tag: Application
+                  value: Interfaces
+            -
+              uuid: d75fb76d06f142a7b41306f8257c5f48
+              name: 'Interface {#IFNAME}: Operational status'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.2.2.1.8.{#SNMPINDEX}'
+              key: 'net.if.operstatus.sophos[{#SNMPINDEX}]'
+              history: 2w
+              trends: 120d
+              valuemap:
+                name: 'Interface operational status'
+              tags:
+                -
+                  tag: Application
+                  value: Interfaces
+            -
+              uuid: b3aa88c4a83849d3a47846a964f2d4c0
+              name: 'Interface {#IFNAME}: Outgoing traffic'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.2.1.31.1.1.1.10.{#SNMPINDEX}'
+              key: 'net.if.out.sophos[{#SNMPINDEX}]'
+              history: 2w
+              trends: 120d
+              value_type: FLOAT
+              units: bps
+              preprocessing:
+                -
+                  type: CHANGE_PER_SECOND
+                  parameters:
+                    - ''
+                -
+                  type: MULTIPLIER
+                  parameters:
+                    - '8'
+              tags:
+                -
+                  tag: Application
+                  value: Interfaces
+          trigger_prototypes:
+            -
+              uuid: e4c7f07b2639408e8c76d33706496cb4
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/net.if.adminstatus.sophos[{#SNMPINDEX}])=1 and last(/Sophos XGS SNMPv2 - CONTEGO/net.if.operstatus.sophos[{#SNMPINDEX}])<>1'
+              name: 'Interface {#IFNAME}: Link is down'
+              priority: AVERAGE
+          graph_prototypes:
+            -
+              uuid: 4bb6ba570b364f418fe7dfbfccd0af89
+              name: 'Interface {#IFNAME}: Traffic'
+              graph_items:
+                -
+                  sortorder: '1'
+                  color: 199C0D
+                  item:
+                    host: 'Sophos XGS SNMPv2 - CONTEGO'
+                    key: 'net.if.in.sophos[{#SNMPINDEX}]'
+                -
+                  sortorder: '2'
+                  color: F63100
+                  item:
+                    host: 'Sophos XGS SNMPv2 - CONTEGO'
+                    key: 'net.if.out.sophos[{#SNMPINDEX}]'
+        -
+          uuid: 4245f7bd9f0a4c7897a3f40a4adee226
+          name: 'Vpn Interface Discovery'
+          type: SNMP_AGENT
+          snmp_oid: 'discovery[{#SFOS_CONN_NAME},1.3.6.1.4.1.2604.5.1.6.1.1.1.1.2,{#SFOS_CONN_DESC},1.3.6.1.4.1.2604.5.1.6.1.1.1.1.3,{#SFOS_CONN_TYPE},1.3.6.1.4.1.2604.5.1.6.1.1.1.1.6,{#SFOS_VPN_LOCAL_PORT},1.3.6.1.4.1.2604.5.1.6.1.1.1.1.7,{#SFOS_VPN_CONN_STATUS},1.3.6.1.4.1.2604.5.1.6.1.1.1.1.9,{#SFOS_VPN_CONN_ACTIVE},1.3.6.1.4.1.2604.5.1.6.1.1.1.1.10]'
+          key: net.if.status
+          filter:
+            conditions:
+              -
+                macro: '{#SFOS_CONN_DESC}'
+                value: '{$SFOS_F_MIB_CONN_DESC_NOT}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: A
+              -
+                macro: '{#SFOS_CONN_DESC}'
+                value: '{$SFOS_F_MIB_CONN_DESC}'
+                formulaid: B
+              -
+                macro: '{#SFOS_CONN_NAME}'
+                value: '{$SFOS_F_MIB_CONN_NAME_NOT}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: C
+              -
+                macro: '{#SFOS_CONN_NAME}'
+                value: '{$SFOS_F_MIB_CONN_NAME}'
+                formulaid: D
+              -
+                macro: '{#SFOS_CONN_TYPE}'
+                value: '{$SFOS_F_MIB_CONN_DESC_NOT}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: E
+              -
+                macro: '{#SFOS_CONN_TYPE}'
+                value: '{$SFOS_F_MIB_CONN_DESC}'
+                formulaid: F
+              -
+                macro: '{#SFOS_VPN_CONN_ACTIVE}'
+                value: '{$SFOS_F_MIB_CONN_ACTIVE_NOT}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: G
+              -
+                macro: '{#SFOS_VPN_CONN_ACTIVE}'
+                value: '{$SFOS_F_MIB_CONN_ACTIVE}'
+                formulaid: H
+              -
+                macro: '{#SFOS_VPN_CONN_STATUS}'
+                value: '{$SFOS_F_MIB_CONN_STATUS_NOT}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: I
+              -
+                macro: '{#SFOS_VPN_CONN_STATUS}'
+                value: '{$SFOS_F_MIB_CONN_STATUS}'
+                formulaid: J
+              -
+                macro: '{#SFOS_VPN_LOCAL_PORT}'
+                value: '{$SFOS_F_MIB_LOCAL_PORT_NOT}'
+                operator: NOT_MATCHES_REGEX
+                formulaid: K
+              -
+                macro: '{#SFOS_VPN_LOCAL_PORT}'
+                value: '{$SFOS_F_MIB_LOCAL_PORT}'
+                formulaid: L
+          item_prototypes:
+            -
+              uuid: e0b867c30edf436087afa8e241601579
+              name: 'IPSec {#SFOS_CONN_NAME}: Active'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2604.5.1.6.1.1.1.1.10.{#SNMPINDEX}'
+              key: 'net.if.status[IPSecActive.{#SNMPINDEX}]'
+              tags:
+                -
+                  tag: Application
+                  value: 'IPSec {#SFOS_CONN_NAME}'
+              trigger_prototypes:
+                -
+                  uuid: 36acf42d298748ba8b31282e61b84ded
+                  expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/net.if.status[IPSecActive.{#SNMPINDEX}],#1) <> last(/Sophos XGS SNMPv2 - CONTEGO/net.if.status[IPSecActive.{#SNMPINDEX}],#2) and last(/Sophos XGS SNMPv2 - CONTEGO/net.if.status[IPSecActive.{#SNMPINDEX}]) = 0'
+                  name: 'IPSec {#SFOS_CONN_NAME}: Desabilitada'
+                  priority: HIGH
+            -
+              uuid: cbae1633de38432ea5075ce51a900267
+              name: 'IPSec {#SFOS_CONN_NAME}: Status'
+              type: SNMP_AGENT
+              snmp_oid: '1.3.6.1.4.1.2604.5.1.6.1.1.1.1.9.{#SNMPINDEX}'
+              key: 'net.if.status[IPSecStatus.{#SNMPINDEX}]'
+              tags:
+                -
+                  tag: Application
+                  value: 'IPSec {#SFOS_CONN_NAME}'
+          trigger_prototypes:
+            -
+              uuid: f3212fe95cee4a139b6554981a7d78c1
+              expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/net.if.status[IPSecStatus.{#SNMPINDEX}])=0 and last(/Sophos XGS SNMPv2 - CONTEGO/net.if.status[IPSecActive.{#SNMPINDEX}])=1'
+              name: 'IPSec Status {#SFOS_CONN_NAME}: Desconectada'
+              priority: HIGH
+      macros:
+        -
+          macro: '{$CPU_UTIL_MAX}'
+          value: '95'
+        -
+          macro: '{$DISK_UTIL_MAX}'
+          value: '85'
+        -
+          macro: '{$IFNAME_MATCHES}'
+          value: '.*'
+        -
+          macro: '{$IFNAME_NOT_MATCHES}'
+          value: '^(lo|sit|ipsec|ppp|gre|tun|tap|docker|veth|br|bond|vlan.*)$'
+        -
+          macro: '{$MEMORY_UTIL_MAX}'
+          value: '90'
+        -
+          macro: '{$SFOS_F_MIB_CONN_ACTIVE}'
+          value: '.*'
+        -
+          macro: '{$SFOS_F_MIB_CONN_ACTIVE_NOT}'
+          value: ^$
+        -
+          macro: '{$SFOS_F_MIB_CONN_DESC}'
+          value: '.*'
+        -
+          macro: '{$SFOS_F_MIB_CONN_DESC_NOT}'
+          value: ^$
+        -
+          macro: '{$SFOS_F_MIB_CONN_NAME}'
+          value: '.*'
+        -
+          macro: '{$SFOS_F_MIB_CONN_NAME_NOT}'
+          value: ^$
+        -
+          macro: '{$SFOS_F_MIB_CONN_STATUS}'
+          value: '.*'
+        -
+          macro: '{$SFOS_F_MIB_CONN_STATUS_NOT}'
+          value: ^$
+        -
+          macro: '{$SFOS_F_MIB_LOCAL_PORT}'
+          value: '.*'
+        -
+          macro: '{$SFOS_F_MIB_LOCAL_PORT_NOT}'
+          value: ^$
+        -
+          macro: '{$SNMP_COMMUNITY}'
+          value: public
+        -
+          macro: '{$SWAP_UTIL_MAX}'
+          value: '90'
+      dashboards:
+        -
+          uuid: 92823255020e42e98371ea2b199216fc
+          name: 'Network interfaces'
+          pages:
+            -
+              widgets:
+                -
+                  type: GRAPH_PROTOTYPE
+                  width: '24'
+                  height: '5'
+                  fields:
+                    -
+                      type: INTEGER
+                      name: source_type
+                      value: '2'
+                    -
+                      type: INTEGER
+                      name: columns
+                      value: '1'
+                    -
+                      type: INTEGER
+                      name: rows
+                      value: '1'
+      valuemaps:
+        -
+          uuid: 6ab40eafc2464c32903310de37610d24
+          name: 'Interface operational status'
+          mappings:
+            -
+              value: '1'
+              newvalue: up
+            -
+              value: '2'
+              newvalue: down
+            -
+              value: '3'
+              newvalue: testing
+            -
+              value: '4'
+              newvalue: unknown
+            -
+              value: '5'
+              newvalue: dormant
+            -
+              value: '6'
+              newvalue: notPresent
+            -
+              value: '7'
+              newvalue: lowerLayerDown
+        -
+          uuid: 73c45556c0974876b11e435c841fe45a
+          name: 'SOPHOS SFOS-FIREWALL-MIB::haStatus'
+          mappings:
+            -
+              value: '0'
+              newvalue: notapplicable
+            -
+              value: '1'
+              newvalue: auxiliary
+            -
+              value: '2'
+              newvalue: standAlone
+            -
+              value: '3'
+              newvalue: primary
+            -
+              value: '4'
+              newvalue: faulty
+            -
+              value: '5'
+              newvalue: ready
+        -
+          uuid: 6e97645d134444feb17ef8ad21772ac9
+          name: 'SOPHOS SFOS-FIREWALL-MIB::haStatusType'
+          mappings:
+            -
+              value: '0'
+              newvalue: disabled
+            -
+              value: '1'
+              newvalue: enabled
+        -
+          uuid: 8393c7ce909e4320a73528943aeed209
+          name: 'SOPHOS SFOS-FIREWALL-MIB::serviceStatus'
+          mappings:
+            -
+              value: '0'
+              newvalue: untouched
+            -
+              value: '1'
+              newvalue: stopped
+            -
+              value: '2'
+              newvalue: initializing
+            -
+              value: '3'
+              newvalue: running
+            -
+              value: '4'
+              newvalue: exiting
+            -
+              value: '5'
+              newvalue: dead
+            -
+              value: '6'
+              newvalue: frozen
+            -
+              value: '7'
+              newvalue: unregistered
+        -
+          uuid: 4188c0fd45b14054aa070fe31bcd6044
+          name: 'SOPHOS SFOS-FIREWALL-MIB::subscriptionStatusType'
+          mappings:
+            -
+              value: '1'
+              newvalue: trial
+            -
+              value: '2'
+              newvalue: unsubscribed
+            -
+              value: '3'
+              newvalue: subscribed
+            -
+              value: '4'
+              newvalue: expired
+  triggers:
+    -
+      uuid: e1c4ed84e8f04346937844b638153284
+      expression: '(last(/Sophos XGS SNMPv2 - CONTEGO/haMode)=1 and last(/Sophos XGS SNMPv2 - CONTEGO/currentHAStatus)=2)'
+      recovery_mode: RECOVERY_EXPRESSION
+      recovery_expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/currentHAStatus)<>2 or last(/Sophos XGS SNMPv2 - CONTEGO/currentHAStatus)<>4'
+      name: 'HA - One of the nodes may be down'
+      priority: HIGH
+      description: 'Alerta quando o HA está ativo e um dos nós está como Stand-alone. Isso ocorre quando o nó secundário (backup) falhou.'
+    -
+      uuid: f19a0c71a7754840b5f85f1aadcc52c4
+      expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/haMode)=1 and last(/Sophos XGS SNMPv2 - CONTEGO/currentHAStatus)=4'
+      recovery_mode: RECOVERY_EXPRESSION
+      recovery_expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/currentHAStatus)<>2 or last(/Sophos XGS SNMPv2 - CONTEGO/currentHAStatus)<>4'
+      name: 'HA - One of the nodes may be down'
+      priority: HIGH
+      description: 'Alerta quando o HA está ativo e um dos nós está como faulty.'
