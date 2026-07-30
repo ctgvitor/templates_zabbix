@@ -1,6 +1,6 @@
 zabbix_export:
   version: '6.0'
-  date: '2026-07-30T17:16:46Z'
+  date: '2026-07-30T17:31:16Z'
   groups:
     -
       uuid: 8f152a974b4f4e8ea08bb94e79bcf105
@@ -828,6 +828,24 @@ zabbix_export:
               expression: 'last(/Sophos XGS SNMPv2 - CONTEGO/smtpService)<>3'
               name: 'Service smtp status is not running'
               priority: AVERAGE
+        -
+          uuid: 492fd3e2827346b793a521f77fc2c60d
+          name: 'SNMP trap'
+          type: SNMP_TRAP
+          key: snmptrap.fallback
+          delay: '0'
+          trends: '0'
+          value_type: LOG
+          triggers:
+            -
+              uuid: 790fdbf86767415a9434fc8d90b0f29e
+              expression: 'find(/Sophos XGS SNMPv2 - CONTEGO/snmptrap.fallback,,"regexp","Gateway\s''(.*)''\sis\sDown")=1'
+              recovery_mode: RECOVERY_EXPRESSION
+              recovery_expression: 'find(/Sophos XGS SNMPv2 - CONTEGO/snmptrap.fallback,,"regexp","Gateway\s''(.*)''\sis\sUp")=1'
+              name: 'Gateway status'
+              event_name: 'Gateway {{ITEM.VALUE}.regsub("Gateway\s''(.*)''\sis\s(Up|Down)","\1 is \2")}'
+              priority: DISASTER
+              manual_close: 'YES'
         -
           uuid: baa11714c6ea48d0bae9c514635ce432
           name: 'Service sshd status'

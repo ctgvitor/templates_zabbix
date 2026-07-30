@@ -1,6 +1,6 @@
 zabbix_export:
   version: '6.0'
-  date: '2026-07-30T17:17:28Z'
+  date: '2026-07-30T17:30:54Z'
   groups:
     -
       uuid: 8f152a974b4f4e8ea08bb94e79bcf105
@@ -1232,6 +1232,15 @@ zabbix_export:
               value: '4'
               newvalue: expired
   triggers:
+    -
+      uuid: d1cb1424f14542aba6f41eebec1b8c06
+      expression: 'find(/Sophos XG FW 20 SNMPv2/snmptrap.fallback,,"regexp","Gateway\s''(.*)''\sis\sDown")=1'
+      recovery_mode: RECOVERY_EXPRESSION
+      recovery_expression: 'find(/Sophos XG FW 20 SNMPv2/snmptrap.fallback,,"regexp","Gateway\s''(.*)''\sis\sUp")=1'
+      name: 'Gateway status'
+      event_name: 'Gateway {{ITEM.VALUE}.regsub("Gateway\s''(.*)''\sis\s(Up|Down)","\1 is \2")}'
+      priority: DISASTER
+      manual_close: 'YES'
     -
       uuid: 0e973a06923543a7bc95fdb8a9b23eae
       expression: '(last(/Sophos XG FW 20 SNMPv2/haMode)=1 and last(/Sophos XG FW 20 SNMPv2/currentHAStatus)=2)'
